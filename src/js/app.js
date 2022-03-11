@@ -1,6 +1,8 @@
-import { of } from 'rxjs';
+import { of, interval } from 'rxjs';
 import { fromFetch } from 'rxjs/fetch';
-import { switchMap, catchError } from 'rxjs/operators';
+import { switchMap, catchError, map } from 'rxjs/operators';
+
+import { ajax } from 'rxjs/ajax';
 
 export default class App {
   constructor(element) {
@@ -11,7 +13,12 @@ export default class App {
   }
 
   getRequest() {
-    const data$ = fromFetch(`${this.url}messages/unread`).pipe(
+    // const data$ = interval(2000).pipe(
+    //   switchMap((ev) => ajax.getJSON(`${this.url}messages/unread`)),
+    // );
+
+    const data$ = interval(2000).pipe(
+      switchMap((ev) => fromFetch(`${this.url}messages/unread`)),
       switchMap((response) => {
         if (response.ok) {
           // OK return data
@@ -20,10 +27,14 @@ export default class App {
         // Server is returning a status requiring the client to try something else.
         return of({ error: true, message: `Error ${response.status}` });
       }),
+
     );
 
     data$.subscribe({
-      next: (result) => console.log(result),
+      // next: (result) => {
+      //   for (const message of result.messages)
+      // }
+      // next: (result) => console.log(result),
       complete: () => console.log('done'),
     });
   }
