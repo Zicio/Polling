@@ -21,5 +21,20 @@ html {
 
 .widget .widget__table {
   margin-top: 30px;
+  min-width: 700px;
+}
+
+.widget .widget__table .table__message {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 50% 30% 20%;
+      grid-template-columns: 50% 30% 20%;
+  border: 1px solid black;
+  padding: 10px;
+  background-color: white;
+}
+
+.widget .widget__table .table__message:not(:first-child) {
+  border-top: none;
 }
 /*# sourceMappingURL=style.css.map */
