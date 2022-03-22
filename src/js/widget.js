@@ -8,6 +8,11 @@ export default class Widget {
     const data$ = interval(2000).pipe(
       take(5),
       switchMap((ev) => fromFetch(`${url}messages/unread`).pipe(
+        catchError((err) => {
+          // Network or other error, handle appropriately
+          console.error('Network error', err);
+          return EMPTY;
+        }),
         switchMap((response) => {
           if (response.ok) {
             // OK return data
@@ -15,11 +20,6 @@ export default class Widget {
           }
           // Server is returning a status requiring the client to try something else.
           console.log(`Error ${response.status}`);
-          return EMPTY;
-        }),
-        catchError((err) => {
-          // Network or other error, handle appropriately
-          console.error('Network error', err);
           return EMPTY;
         }),
       )),
