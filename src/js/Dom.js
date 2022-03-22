@@ -12,7 +12,7 @@ export default class Dom {
     const textMessage = Dom.setEl('span', 'message__text');
     let text = message.subject;
     if (message.subject.length > 15) {
-      text = message.body.slice(0, 16).concat('...');
+      text = message.body.slice(0, 15).concat('...');
     }
     textMessage.textContent = text;
     messageTicket.append(textMessage);
@@ -31,13 +31,13 @@ export default class Dom {
 
   static getDate(sec) {
     const date = new Date(sec);
-    const month = Dom.formatDate(date.getMonth() + 1);
-    const day = Dom.formatDate(date.getDate());
-    let hour = Dom.formatDate(date.getHours());
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    let hour = String(date.getHours()).padStart(2, '0');
     if (hour === 24) {
       hour = 0;
     }
-    const minute = Dom.formatDate(date.getMinutes());
+    const minute = String(date.getMinutes()).padStart(2, '0');
     const year = +date.getFullYear().toString().slice(2);
     return {
       month,
@@ -46,12 +46,5 @@ export default class Dom {
       minute,
       year,
     };
-  }
-
-  static formatDate(date) {
-    if (date < 10) {
-      date = `0${date}`;
-    }
-    return date;
   }
 }
